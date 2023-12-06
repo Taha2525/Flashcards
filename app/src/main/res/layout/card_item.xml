@@ -1,0 +1,30 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="10dp"
+    app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="#ffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="?android:attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/cardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Karteninhalt"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:paddingBottom="8dp"/>
+
+        <!-- Weitere UI-Elemente für jede Karte -->
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
