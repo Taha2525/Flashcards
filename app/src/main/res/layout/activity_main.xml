@@ -40,11 +40,12 @@
 
     <Button
         android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
+        android:layout_width="121dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="250dp"
         android:backgroundTint="#4CAF50"
         android:text="Next"
@@ -57,6 +58,7 @@
         android:layout_below="@id/flashcardCardView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="#2196F3"
         android:text="Edit"
         android:textSize="18sp" />
@@ -79,11 +81,13 @@
         android:layout_height="74dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
         android:background="@drawable/round_button_background"
         android:gravity="center"
         android:padding="10dp"
         android:text="+"
         android:textColor="#FFFFFF"
         android:textSize="24sp" />
+
 
 </RelativeLayout>

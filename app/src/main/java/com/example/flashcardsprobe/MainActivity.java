@@ -9,14 +9,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private CardView flashcardCardView;
     private TextView cardContentTextView;
-    private Button prevButton, nextButton, editButton, deleteButton, addButton;
     private boolean isFrontOfCardShowing = true;
     private int currentCardIndex = 0;
     private ArrayList<Flashcard> flashcards;
@@ -32,11 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
         flashcardCardView = findViewById(R.id.flashcardCardView);
         cardContentTextView = findViewById(R.id.cardContentTextView);
-        prevButton = findViewById(R.id.prevButton);
-        nextButton = findViewById(R.id.nextButton);
-        editButton = findViewById(R.id.editButton);
-        deleteButton = findViewById(R.id.deleteButton);
-        addButton = findViewById(R.id.addButton);
+        Button prevButton = findViewById(R.id.prevButton);
+        Button nextButton = findViewById(R.id.nextButton);
+        Button editButton = findViewById(R.id.editButton);
+        Button deleteButton = findViewById(R.id.deleteButton);
+        Button addButton = findViewById(R.id.addButton);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 addNewFlashcard();
             }
         });
+
         updateCardContent();
 
         flashcardCardView.setOnClickListener(new View.OnClickListener() {
@@ -86,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 deleteFlashcard(currentCardIndex);
             }
         });
-        };
-
+    }
 
     private void initializeFlashcards() {
         flashcards = new ArrayList<>();
@@ -101,15 +99,35 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initializeCardColors() {
-        cardColors = new int[] {
+        cardColors = new int[]{
                 getResources().getColor(R.color.cardColor1),
                 getResources().getColor(R.color.cardColor2),
                 getResources().getColor(R.color.cardColor3),
                 getResources().getColor(R.color.cardColor4),
                 getResources().getColor(R.color.cardColor5),
-                // ... Fügen Sie hier die restlichen Farben aus der colors.xml hinzu
+                getResources().getColor(R.color.cardColor6),
+                getResources().getColor(R.color.cardColor7),
+                getResources().getColor(R.color.cardColor8),
+                getResources().getColor(R.color.cardColor9),
+                getResources().getColor(R.color.cardColor10),
+                getResources().getColor(R.color.cardColor11),
+                getResources().getColor(R.color.cardColor12),
+                getResources().getColor(R.color.cardColor13),
+                getResources().getColor(R.color.cardColor14),
+                getResources().getColor(R.color.cardColor15),
+                getResources().getColor(R.color.cardColor16),
+                getResources().getColor(R.color.cardColor17),
+                getResources().getColor(R.color.cardColor18),
+                getResources().getColor(R.color.cardColor19),
+                getResources().getColor(R.color.cardColor20),
+                getResources().getColor(R.color.cardColor21),
+                getResources().getColor(R.color.cardColor22),
+                getResources().getColor(R.color.cardColor23),
+                getResources().getColor(R.color.cardColor24),
+                getResources().getColor(R.color.cardColor25),
         };
     }
+
 
     private void addNewFlashcard() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -175,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     private void editFlashcard(int index) {
         Flashcard flashcard = flashcards.get(index);
 
@@ -213,8 +232,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-    private class Flashcard {
+    public static class Flashcard {
         private String frontText;
         private String backText;
 
@@ -239,4 +257,5 @@ public class MainActivity extends AppCompatActivity {
             this.backText = backText;
         }
     }
+
 }
