@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import java.util.ArrayList;
 import java.util.Random;
-
+// kommentar
 public class MainActivity extends AppCompatActivity {
     private CardView flashcardCardView;
     private TextView cardContentTextView;
