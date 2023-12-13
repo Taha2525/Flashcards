@@ -1,8 +1,14 @@
 package com.example.flashcardsprobe;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,6 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import java.util.ArrayList;
 import java.util.Random;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+
 
 public class MainActivity extends AppCompatActivity {
     private CardView flashcardCardView;
@@ -20,13 +30,39 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Flashcard> flashcards;
     private int[] cardColors;
 
+    private void saveFlashcards() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Flashcards", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(flashcards);
+        editor.putString("flashcardList", json);
+        editor.apply();
+    }
+
+    private void loadFlashcards() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Flashcards", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("flashcardList", null);
+        Type type = new TypeToken<ArrayList<Flashcard>>() {}.getType();
+        flashcards = gson.fromJson(json, type);
+
+        if (flashcards == null) {
+            flashcards = new ArrayList<>();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeFlashcards();
+        loadFlashcards();
         initializeCardColors();
+        if (flashcards.isEmpty()) {
+            initializeFlashcards();
+        }
+
+
 
         flashcardCardView = findViewById(R.id.flashcardCardView);
         cardContentTextView = findViewById(R.id.cardContentTextView);
@@ -35,6 +71,56 @@ public class MainActivity extends AppCompatActivity {
         Button editButton = findViewById(R.id.editButton);
         Button deleteButton = findViewById(R.id.deleteButton);
         Button addButton = findViewById(R.id.addButton);
+        flashcardCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Setzen Sie den Drehpunkt in die Mitte der Karte
+                flashcardCardView.setPivotX(flashcardCardView.getWidth() / 2);
+                flashcardCardView.setPivotY(flashcardCardView.getHeight() / 2);
+
+                // Erstellen Sie die erste Hälfte der Flip-Animation
+                ObjectAnimator flip1 = ObjectAnimator.ofFloat(flashcardCardView, "rotationY", 0f, 90f);
+                flip1.setInterpolator(new AccelerateInterpolator());
+                flip1.setDuration(500);
+
+                // Erstellen Sie die zweite Hälfte der Flip-Animation
+                final ObjectAnimator flip2 = ObjectAnimator.ofFloat(flashcardCardView, "rotationY", -90f, 0f);
+                flip2.setInterpolator(new DecelerateInterpolator());
+                flip2.setDuration(500);
+
+                flip1.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+
+                        if (!flashcards.isEmpty() && currentCardIndex >= 0 && currentCardIndex < flashcards.size()) {
+                            // Wechseln Sie den Text in der Mitte der Animation
+                            if (isFrontOfCardShowing) {
+                                cardContentTextView.setText(flashcards.get(currentCardIndex).getBackText());
+                            } else {
+                                cardContentTextView.setText(flashcards.get(currentCardIndex).getFrontText());
+                            }
+                            isFrontOfCardShowing = !isFrontOfCardShowing;
+                        }
+
+
+                        // Beispielsweise Kamera-Distanz setzen
+                        float scale = getResources().getDisplayMetrics().density * 8000;
+                        flashcardCardView.setCameraDistance(scale);
+
+                        // Starten Sie die zweite Hälfte der Animation
+                        flip2.start();
+                    }
+                });
+
+                // Starten Sie die erste Hälfte der Animation
+                flip1.start();
+
+                flashcardCardView.setCardElevation(0);
+
+            }
+        });
+
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,32 +131,59 @@ public class MainActivity extends AppCompatActivity {
 
         updateCardContent();
 
-        flashcardCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleCardContent();
-            }
-        });
+
 
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentCardIndex > 0) {
-                    currentCardIndex--;
-                    updateCardContent();
+                    // Animation für das aktuelle Element
+                    ObjectAnimator outAnimator = ObjectAnimator.ofFloat(flashcardCardView, "translationX", 0, flashcardCardView.getWidth());
+                    outAnimator.setDuration(200);
+                    outAnimator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            currentCardIndex--;
+                            updateCardContent();
+
+                            // Animation für das vorherige Element
+                            flashcardCardView.setTranslationX(-flashcardCardView.getWidth());
+                            ObjectAnimator inAnimator = ObjectAnimator.ofFloat(flashcardCardView, "translationX", -flashcardCardView.getWidth(), 0);
+                            inAnimator.setDuration(200);
+                            inAnimator.start();
+                        }
+                    });
+                    outAnimator.start();
                 }
             }
         });
+
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentCardIndex < flashcards.size() - 1) {
-                    currentCardIndex++;
-                    updateCardContent();
+                    // Animation für das aktuelle Element
+                    ObjectAnimator outAnimator = ObjectAnimator.ofFloat(flashcardCardView, "translationX", 0, -flashcardCardView.getWidth());
+                    outAnimator.setDuration(200);
+                    outAnimator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            currentCardIndex++;
+                            updateCardContent();
+
+                            // Animation für das nächste Element
+                            flashcardCardView.setTranslationX(flashcardCardView.getWidth());
+                            ObjectAnimator inAnimator = ObjectAnimator.ofFloat(flashcardCardView, "translationX", flashcardCardView.getWidth(), 0);
+                            inAnimator.setDuration(200);
+                            inAnimator.start();
+                        }
+                    });
+                    outAnimator.start();
                 }
             }
         });
+
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +203,9 @@ public class MainActivity extends AppCompatActivity {
     private void initializeFlashcards() {
         flashcards = new ArrayList<>();
         // Stellen Sie sicher, dass diese Texte korrekt sind
-        String[] frontTexts = {"Apple", "Book", "Computer", "Nature", "Ocean", "Sun", "Moon", "Star", "Mountain", "River"};
-        String[] backTexts = {"Apfel", "Buch", "Computer", "Natur", "Ozean", "Sonne", "Mond", "Stern", "Berg", "Fluss"};
+        String[] frontTexts = {};
+
+        String[] backTexts = {};
         for (int i = 0; i < frontTexts.length; i++) {
             flashcards.add(new Flashcard(frontTexts[i], backTexts[i]));
         }
@@ -149,9 +263,12 @@ public class MainActivity extends AppCompatActivity {
                     flashcards.add(new Flashcard(frontText, backText));
                     currentCardIndex = flashcards.size() - 1; // Zeigt die neu hinzugefügte Karte an
                     updateCardContent();
+                    saveFlashcards(); // Verschieben Sie diese Zeile hierhin
                 }
             }
         });
+
+
 
         builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
             @Override
@@ -162,7 +279,9 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+        saveFlashcards();
     }
+
 
     private void toggleCardContent() {
         if (isFrontOfCardShowing) {
@@ -174,10 +293,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCardContent() {
-        Flashcard currentCard = flashcards.get(currentCardIndex);
-        cardContentTextView.setText(isFrontOfCardShowing ? currentCard.getFrontText() : currentCard.getBackText());
-        flashcardCardView.setCardBackgroundColor(getRandomColor());
+        if (!flashcards.isEmpty() && currentCardIndex >= 0 && currentCardIndex < flashcards.size()) {
+            Flashcard currentCard = flashcards.get(currentCardIndex);
+            cardContentTextView.setText(isFrontOfCardShowing ? currentCard.getFrontText() : currentCard.getBackText());
+            flashcardCardView.setCardBackgroundColor(getRandomColor());
+        } else {
+            // Hier können Sie definieren, was passieren soll, wenn keine Karten vorhanden sind
+            cardContentTextView.setText("Keine Karten vorhanden");
+        }
     }
+
 
 
     private int getRandomColor() {
@@ -191,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
             currentCardIndex = Math.max(0, currentCardIndex - 1);
             updateCardContent();
         }
+        saveFlashcards();
     }
 
 
@@ -218,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
                 flashcard.setFrontText(newFrontText);
                 flashcard.setBackText(newBackText);
                 updateCardContent();
+                saveFlashcards(); // Verschieben Sie diese Zeile hierhin
             }
         });
 
@@ -231,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
     public static class Flashcard {
         private String frontText;
