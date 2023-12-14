@@ -6,17 +6,24 @@ import android.animation.ObjectAnimator;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import java.util.ArrayList;
 import java.util.Random;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -29,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private int currentCardIndex = 0;
     private ArrayList<Flashcard> flashcards;
     private int[] cardColors;
+    private ArrayList<Category> categories = new ArrayList<>();
+
 
     private void saveFlashcards() {
         SharedPreferences sharedPreferences = getSharedPreferences("Flashcards", MODE_PRIVATE);
@@ -51,6 +60,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeCategories() {
+        // Beispiel-Kategorien
+        categories.add(new Category("Türkisch"));
+        categories.add(new Category("Englisch"));
+        categories.add(new Category("Italienisch"));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadFlashcards();
         initializeCardColors();
+        initializeCategories();
         if (flashcards.isEmpty()) {
             initializeFlashcards();
         }
@@ -70,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
         Button nextButton = findViewById(R.id.nextButton);
         Button editButton = findViewById(R.id.editButton);
         Button deleteButton = findViewById(R.id.deleteButton);
-        Button addButton = findViewById(R.id.addButton);
+
+
         flashcardCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,14 +140,35 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = findViewById(R.id.fab_add);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNewFlashcard();
+                PopupMenu popup = new PopupMenu(MainActivity.this, view);
+                popup.getMenuInflater().inflate(R.menu.fab_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.action_add_new_card) {
+                            addNewFlashcard();
+                            return true;
+                        } else if (id == R.id.new_category) {
+                            // Implementieren Sie die Logik für "Create new Group"
+                            return true;
+                        } else if (id == R.id.action_category) {
+                            // Implementieren Sie die Logik für "View Groups"
+                            return true;
+                        } else if (id == R.id.action_add_to_category) {
+                            assignCardToCategory();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
             }
         });
 
-        updateCardContent();
 
 
 
@@ -360,7 +399,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static class Flashcard {
+    private void assignCardToCategory() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Assign Flashcard to Category");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        Spinner cardSpinner = new Spinner(this);
+        ArrayAdapter<Flashcard> cardAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, flashcards);
+        cardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cardSpinner.setAdapter(cardAdapter);
+
+        Spinner categorySpinner = new Spinner(this);
+        ArrayAdapter<Category> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(categoryAdapter);
+
+        layout.addView(cardSpinner);
+        layout.addView(categorySpinner);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Assign", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MainActivity.Flashcard selectedCard = (Flashcard) cardSpinner.getSelectedItem();
+                Category selectedCategory = (Category) categorySpinner.getSelectedItem();
+                if (selectedCard != null && selectedCategory != null) {
+                    selectedCategory.addFlashcard(selectedCard);
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
+    public class Flashcard {
         private String frontText;
         private String backText;
 
@@ -385,5 +468,6 @@ public class MainActivity extends AppCompatActivity {
             this.backText = backText;
         }
     }
+
 
 }
