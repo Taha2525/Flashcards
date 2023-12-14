@@ -1,4 +1,4 @@
-package com.example.flashcardsprobe;
+package com.example.flashcards;
 
 import org.junit.Test;
 

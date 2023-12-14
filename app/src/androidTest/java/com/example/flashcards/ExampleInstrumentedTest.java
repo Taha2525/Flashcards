@@ -1,4 +1,4 @@
-package com.example.flashcardsprobe;
+package com.example.flashcards;
 
 import android.content.Context;
 
