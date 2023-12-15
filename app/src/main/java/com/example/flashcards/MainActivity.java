@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
         flashcardManager = new FlashcardManager(sharedPreferencesHelper);
         categoryManager = new CategoryManager(sharedPreferencesHelper);
 
-
         flashcardCardView = findViewById(R.id.flashcardCardView);
         cardContentTextView = findViewById(R.id.cardContentTextView);
         recyclerView = findViewById(R.id.recyclerView);
-        backButton = findViewById(R.id.backButton);
+        TextView currentCategoryTextView = findViewById(R.id.currentCategoryTextView);
+        currentCategoryTextView.setText("Category: " + getIntent().getStringExtra("SELECTED_CATEGORY_NAME"));
 
         selectedCategoryId = getIntent().getStringExtra("SELECTED_CATEGORY_ID");
         Log.d("FlashcardApp", "Received Category ID: " + selectedCategoryId);
@@ -87,15 +88,16 @@ public class MainActivity extends AppCompatActivity {
     private void setupButtons() {
         Button prevButton = findViewById(R.id.prevButton);
         Button nextButton = findViewById(R.id.nextButton);
-        Button editButton = findViewById(R.id.editButton);
-        Button deleteButton = findViewById(R.id.deleteButton);
+        ImageView editButton = findViewById(R.id.editIcon);
+        ImageView deleteButton = findViewById(R.id.deleteIcon);
+        ImageView backButton = findViewById(R.id.backButton);
         FloatingActionButton fabAdd = findViewById(R.id.fab_add);
-        Button backButton = findViewById(R.id.backButton);
 
         backButton.setOnClickListener(v -> navigateBack());
         flashcardCardView.setOnClickListener(v -> flipCard());
         prevButton.setOnClickListener(v -> navigateFlashcards(false));
         nextButton.setOnClickListener(v -> navigateFlashcards(true));
+
         editButton.setOnClickListener(v -> editFlashcard(currentCardIndex));
         deleteButton.setOnClickListener(v -> deleteFlashcard(currentCardIndex));
         fabAdd.setOnClickListener(v -> showAddFlashcardDialog());
@@ -174,51 +176,44 @@ public class MainActivity extends AppCompatActivity {
         AnimationUtils.flipCard(flashcardCardView, this::toggleCardContent);
     }
 
-    private void navigateFlashcards(boolean toNext) {
-        int nextIndex = toNext ? findNextFlashcardIndex() : findPrevFlashcardIndex();
-        if (nextIndex < 0) {
-            return;
-        }
-        slideOutAndInAnimation(toNext);
-        currentCardIndex = nextIndex;
-        updateCardContent();
-        flashcardAdapter.notifyDataSetChanged();
-    }
-
-    /*
-    * private void navigateFlashcards(boolean next) {
-        int newCardIndex = next ? findNextFlashcardIndex() : findPrevFlashcardIndex();
-        if (newCardIndex != -1) {
-            currentCardIndex = newCardIndex;
-            updateCardContent();
-            slideOutAndInAnimation(next);
-        }
-    }
-    * */
-
     private void navigateBack() {
         finish();
     }
 
-    private int findNextFlashcardIndex() {
-        List<Flashcard> flashcards = flashcardManager.getFlashcards();
-        for (int i = currentCardIndex + 1; i < flashcards.size(); i++) {
-            if (selectedCategoryId.equals(flashcards.get(i).getCategoryId())) {
-                return i;
+    private void navigateFlashcards(boolean next) {
+        List<Flashcard> filteredFlashcards = getFilteredFlashcards();
+
+        if (next) {
+            int nextCardIndex = findNextFlashcardIndex(filteredFlashcards, currentCardIndex);
+            if (nextCardIndex != -1) {
+                slideOutAndInAnimation(true);
+                currentCardIndex = nextCardIndex;
+                updateCardContent();
+            }
+        } else {
+            int prevCardIndex = findPrevFlashcardIndex(filteredFlashcards, currentCardIndex);
+            if (prevCardIndex != -1) {
+                slideOutAndInAnimation(false);
+                currentCardIndex = prevCardIndex;
+                updateCardContent();
             }
         }
-        return -1;
     }
 
-    private int findPrevFlashcardIndex() {
-        List<Flashcard> flashcards = flashcardManager.getFlashcards();
-        for (int i = currentCardIndex - 1; i >= 0; i--) {
-            if (selectedCategoryId.equals(flashcards.get(i).getCategoryId())) {
-                return i;
-            }
+    private int findNextFlashcardIndex(List<Flashcard> flashcards, int currentIndex) {
+        for (int i = currentIndex + 1; i < flashcards.size(); i++) {
+            return i;
         }
-        return -1;
+        return -1; // No next flashcard in the selected category
     }
+
+    private int findPrevFlashcardIndex(List<Flashcard> flashcards, int currentIndex) {
+        for (int i = currentIndex - 1; i >= 0; i--) {
+            return i;
+        }
+        return -1; // No previous flashcard in the selected category
+    }
+
 
     private void slideOutAndInAnimation(boolean toNext) {
         ObjectAnimator outAnimator = ObjectAnimator.ofFloat(flashcardCardView, "translationX", 0, toNext ? -flashcardCardView.getWidth() : flashcardCardView.getWidth());

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom Layer: Gradient Background -->
+    <item>
+        <shape>
+            <gradient
+                android:angle="90"
+            android:startColor="#E6A88A"
+            android:endColor="#fff"
+            android:type="linear" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <!-- Top Layer: Button Content -->
+    <item android:top="4dp" android:left="4dp" android:right="4dp" android:bottom="4dp">
+        <shape>
+            <solid android:color="#FFFFFF" />  <!-- Button content color (e.g., white) -->
+            <corners android:radius="8dp" />   <!-- Should match the corner radius of the background -->
+        </shape>
+    </item>
+</layer-list>

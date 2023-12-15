@@ -2,5 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_add_new_card"
-        android:title="Add new Flashcard" />
+        android:title="Add new Flashcard"
+        />
 </menu>
