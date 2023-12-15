@@ -5,31 +5,22 @@
     android:background="#000000"
     android:padding="16dp">
 
-    <!-- Spinner for category selection -->
-    <Spinner
-        android:id="@+id/categorySpinner"
+    <!-- Back Button -->
+    <Button
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-
-    <!-- TextView to display the current category -->
-    <TextView
-        android:id="@+id/currentCategoryTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/categorySpinner"
-        android:layout_centerHorizontal="true"
+        android:text="Back"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="16dp"
-        android:text=""
-        android:textSize="18sp" />
+        android:layout_marginStart="16dp" />
 
     <!-- RecyclerView for listing flashcards or categories -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/currentCategoryTextView"
         android:visibility="gone" /> <!-- Set visibility based on the context -->
 
     <!-- CardView for displaying the flashcard content -->
