@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +43,26 @@ public class MainActivity extends AppCompatActivity {
     private FlashcardManager flashcardManager;
     private String selectedCategoryId;
 
+    private int[] cardColors = new int[]{
+            R.color.cardColor1, // Lemon Yellow
+            R.color.cardColor2, // Light Pink
+            R.color.cardColor3, // Sky Blue
+            R.color.cardColor4, // Lavender
+            R.color.cardColor5, // Turquoise Blue
+            R.color.newColor1,
+            R.color.newColor2,
+            R.color.newColor3,
+            R.color.newColor4,
+            R.color.newColor5,
+            R.color.newColor6,
+            R.color.newColor7,
+            R.color.newColor8,
+            R.color.newColor9,
+            R.color.newColor10
+    };
+    private int currentColorIndex = 0;
+
+
     private CategoryManager categoryManager;
 
     @Override
@@ -46,23 +70,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(this);
-        flashcardManager = new FlashcardManager(sharedPreferencesHelper);
-        categoryManager = new CategoryManager(sharedPreferencesHelper);
+        SharedPreferences preferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+        boolean isFirstLaunch = preferences.getBoolean("FirstLaunch", true);
 
-        flashcardCardView = findViewById(R.id.flashcardCardView);
-        cardContentTextView = findViewById(R.id.cardContentTextView);
-        recyclerView = findViewById(R.id.recyclerView);
-        TextView currentCategoryTextView = findViewById(R.id.currentCategoryTextView);
-        currentCategoryTextView.setText("Category: " + getIntent().getStringExtra("SELECTED_CATEGORY_NAME"));
+        if (isFirstLaunch) {
+            Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+            startActivity(intent);
+            finish(); // Close MainActivity
+            return; // Prevent further initialization in this launch
+        }
 
-        selectedCategoryId = getIntent().getStringExtra("SELECTED_CATEGORY_ID");
-        Log.d("FlashcardApp", "Received Category ID: " + selectedCategoryId);
-
+        initManagers();
+        initViews();
         setupRecyclerView();
         setupButtons();
         updateCardContent();
     }
+
+    private void initManagers() {
+        SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(this);
+        flashcardManager = new FlashcardManager(sharedPreferencesHelper);
+        categoryManager = new CategoryManager(sharedPreferencesHelper);
+    }
+
+    private void initViews() {
+        flashcardCardView = findViewById(R.id.flashcardCardView);
+        cardContentTextView = findViewById(R.id.cardContentTextView);
+        recyclerView = findViewById(R.id.recyclerView);
+        TextView currentCategoryTextView = findViewById(R.id.currentCategoryTextView);
+
+        String selectedCategoryName = getIntent().getStringExtra("SELECTED_CATEGORY_NAME");
+        currentCategoryTextView.setText(selectedCategoryName != null ? "Category: " + selectedCategoryName : "Category: Not Set");
+
+        selectedCategoryId = getIntent().getStringExtra("SELECTED_CATEGORY_ID");
+        Log.d("FlashcardApp", "Received Category ID: " + selectedCategoryId);
+    }
+
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -104,13 +147,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void deleteFlashcard(int index) {
-        flashcardManager.deleteFlashcard(index);
-        flashcardAdapter.notifyDataSetChanged();
-        if (currentCardIndex >= flashcardManager.getFlashcards().size()) {
-            currentCardIndex = Math.max(0, flashcardManager.getFlashcards().size() - 1);
+        if (index < 0 || index >= flashcardManager.getFlashcards().size()) {
+            Toast.makeText(this, "Invalid flashcard index", Toast.LENGTH_SHORT).show();
+            return;
         }
-        updateCardContent();
+
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Flashcard")
+                .setMessage("Are you sure you want to delete this flashcard?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    flashcardManager.deleteFlashcard(index);
+                    flashcardAdapter.notifyDataSetChanged();
+                    if (currentCardIndex >= flashcardManager.getFlashcards().size()) {
+                        currentCardIndex = Math.max(0, flashcardManager.getFlashcards().size() - 1);
+                    }
+                    updateCardContent();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
+
 
     private void showAddFlashcardDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -241,17 +297,23 @@ public class MainActivity extends AppCompatActivity {
 
         if (filteredFlashcards.isEmpty()) {
             cardContentTextView.setText("No flashcards available in this category");
-            isFrontOfCardShowing = true; // Reset the flag
-            return; // Early return to prevent showing cards from other categories
-        }
-
-        if (currentCardIndex < 0 || currentCardIndex >= filteredFlashcards.size()) {
-            cardContentTextView.setText("Invalid flashcard index: " + currentCardIndex);
+            isFrontOfCardShowing = true;
+            currentCardIndex = -1;
         } else {
+            if (currentCardIndex < 0 || currentCardIndex >= filteredFlashcards.size()) {
+                currentCardIndex = 0;
+            }
             Flashcard currentCard = filteredFlashcards.get(currentCardIndex);
-            cardContentTextView.setText(isFrontOfCardShowing ? currentCard.getFrontText() : currentCard.getBackText());
-            isFrontOfCardShowing = true; // Reset the flag for the next card
+            cardContentTextView.setText(currentCard.getFrontText());
+            isFrontOfCardShowing = true;
+
+            // Change the card's background color
+            int colorId = cardColors[currentColorIndex % cardColors.length];
+            flashcardCardView.setCardBackgroundColor(getResources().getColor(colorId, null));
+            currentColorIndex++;
         }
     }
+
+
 
 }

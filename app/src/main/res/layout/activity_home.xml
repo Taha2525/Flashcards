@@ -2,69 +2,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@drawable/gradient_background"> <!-- Set the background to the gradient drawable -->
-
-    <!-- App Title -->
+    android:background="@drawable/gradient_background">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:textAlignment="center">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#00BCD4"
-            android:baselineAligned="false"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/homeTitleTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#E6A88A"
-                android:text="TALPCARDS"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="34sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+        android:paddingTop="20dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:text="Select a Category"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textColor="#333333"
+            android:textSize="24sp" />
 
         <Spinner
             android:id="@+id/homeCategorySpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="40dp" />
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="20dp"
+            android:background="#DDEEFF"
+            android:scrollbarSize="4dp" />
 
-        <Button
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addCategoryButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:textColor="#000000" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editCategoryButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Edit"
+                android:textColor="#000000" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteCategoryButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Delete"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/enterButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:backgroundTint="#E6A88A"
+            android:backgroundTint="#8EDCE6"
             android:elevation="4dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
-            android:text="Enter"
-            android:textColor="#FFFFFF" />
+            android:textSize="20sp"
+            android:text="Go to Flashcards"
+            android:textColor="#000" />
     </LinearLayout>
-
-    <!-- Subtitle/Instructions -->
-
-    <!-- Category Spinner -->
-
-    <!-- Enter Button -->
-
 </RelativeLayout>

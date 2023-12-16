@@ -2,6 +2,8 @@ package com.example.flashcards;
 
 import com.example.flashcards.models.Flashcard;
 import com.example.flashcards.utils.SharedPreferencesHelper;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class FlashcardManager {
@@ -35,6 +37,17 @@ public class FlashcardManager {
             flashcards.remove(index);
             saveFlashcards();
         }
+    }
+
+    public void deleteFlashcardsByCategory(String categoryId) {
+        List<Flashcard> flashcardsToRemove = new ArrayList<>();
+        for (Flashcard flashcard : getFlashcards()) {
+            if (flashcard.getCategoryId().equals(categoryId)) {
+                flashcardsToRemove.add(flashcard);
+            }
+        }
+        getFlashcards().removeAll(flashcardsToRemove);
+        saveFlashcards();
     }
 
     private void saveFlashcards() {

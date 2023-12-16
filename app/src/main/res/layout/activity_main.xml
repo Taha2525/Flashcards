@@ -96,8 +96,9 @@
         android:layout_below="@id/flashcardCardView"
         android:layout_alignParentStart="true"
         android:layout_marginTop="32dp"
-        android:backgroundTint="#E6A88A"
+        android:backgroundTint="#8EDCE6"
         android:text="Previous"
+        android:textColor="#070707"
         android:textSize="20sp" />
 
     <Button
@@ -107,8 +108,9 @@
         android:layout_below="@id/flashcardCardView"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="32dp"
-        android:backgroundTint="#E6A88A"
+        android:backgroundTint="#8EDCE6"
         android:text="Next"
+        android:textColor="#000000"
         android:textSize="20sp" />
 
     <!-- Floating Action Button for adding new flashcards or categories -->
@@ -123,7 +125,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="TODO"
-        app:backgroundTint="#086788"
+        app:backgroundTint="#011d41"
         app:srcCompat="@android:drawable/ic_input_add"
         app:tint="#FFFFFF" />
 

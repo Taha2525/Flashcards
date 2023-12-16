@@ -1,36 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Vorhandene Farben -->
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="colorButtonPrev">#FFCC80</color> <!-- Helles Orange -->
-    <color name="colorButtonNext">#C5E1A5</color> <!-- Helles Grün -->
-    <color name="cardColor1">#FFF59D</color> <!-- Zitronengelb -->
-    <color name="cardColor2">#F48FB1</color> <!-- Helles Pink -->
-    <color name="cardColor3">#81DEEA</color> <!-- Himmelblau -->
-    <color name="cardColor4">#CE93D8</color> <!-- Lavendel -->
-    <color name="cardColor5">#80DEEA</color> <!-- Türkisblau -->
+    <!-- Existing Colors -->
+    <color name="cardColor1">#FFF59D</color> <!-- Lemon Yellow -->
+    <color name="cardColor2">#F48FB1</color> <!-- Light Pink -->
+    <color name="cardColor3">#81DEEA</color> <!-- Sky Blue -->
+    <color name="cardColor4">#CE93D8</color> <!-- Lavender -->
+    <color name="cardColor5">#80DEEA</color> <!-- Turquoise Blue -->
 
-    <!-- Neue helle Farben -->
-    <color name="cardColor6">#FFE082</color> <!-- Sandgelb -->
-    <color name="cardColor7">#FFAB91</color> <!-- Korallenrosa -->
-    <color name="cardColor8">#BCAAA4</color> <!-- Taupe -->
-    <color name="cardColor9">#B39DDB</color> <!-- Hellviolett -->
-    <color name="cardColor10">#9FA8DA</color> <!-- Blassblau -->
-    <color name="cardColor11">#90CAF9</color> <!-- Babyblau -->
-    <color name="cardColor12">#80CBC4</color> <!-- Aquamarin -->
-    <color name="cardColor13">#A5D6A7</color> <!-- Mintgrün -->
-    <color name="cardColor14">#FFF176</color> <!-- Sonnengelb -->
-    <color name="cardColor15">#FFD54F</color> <!-- Goldgelb -->
-    <color name="cardColor16">#FFC107</color> <!-- Amber -->
-    <color name="cardColor17">#FFB74D</color> <!-- Orange -->
-    <color name="cardColor18">#FFA726</color> <!-- Mandarinenorange -->
-    <color name="cardColor19">#FF7043</color> <!-- Lachsfarben -->
-    <color name="cardColor20">#FFAB40</color> <!-- Pfirsichorange -->
-    <color name="cardColor21">#FFCCBC</color> <!-- Rosa Orange -->
-    <color name="cardColor22">#FFE0B2</color> <!-- Beige -->
-    <color name="cardColor23">#FFECB3</color> <!-- Vanillegelb -->
-    <color name="cardColor24">#FFF8E1</color> <!-- Cremeweiß -->
-    <color name="cardColor25">#F5F5F5</color> <!-- Helles Grau -->
+    <!-- New Colors -->
+    <color name="newColor1">#4EB1A1</color> <!-- Darker Teal -->
+    <color name="newColor2">#A0DFE8</color> <!-- Light Sky Blue -->
+    <color name="newColor3">#7DDC88</color> <!-- Fresh Light Green -->
+    <color name="newColor4">#547A61</color> <!-- Darker Earthy Green -->
+    <color name="newColor5">#9BA9F5</color> <!-- Soft Pastel Purple -->
+    <color name="newColor6">#72B0B8</color> <!-- Muted Blue with Green Hint -->
+    <color name="newColor7">#B2E1FF</color> <!-- Very Light and Airy Blue -->
+    <color name="newColor8">#98D9A1</color> <!-- Pale Soothing Green -->
+    <color name="newColor9">#6D7885</color> <!-- Muted Gray-Infused Blue -->
+    <color name="newColor10">#A8B6F8</color> <!-- Gentle Lavender-Blue -->
 </resources>
