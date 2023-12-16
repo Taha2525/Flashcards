@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.flashcards">
+    package="com.stampitsolutions.flashcards">
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,7 @@
         android:theme="@style/Theme.FlashcardsProbe"
         >
         <activity
-            android:name=".WelcomeActivity"
+            android:name="com.stampitsolutions.flashcards.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,12 +22,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name="com.stampitsolutions.flashcards.HomeActivity"
             android:exported="true">
 
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.stampitsolutions.flashcards.MainActivity"
             android:exported="true">
 
         </activity>
