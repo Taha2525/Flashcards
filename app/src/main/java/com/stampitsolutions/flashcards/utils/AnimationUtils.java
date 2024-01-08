@@ -11,7 +11,6 @@ import android.view.animation.DecelerateInterpolator;
 public class AnimationUtils {
 
     public static void flipCard(View card, Runnable midAnimationRunnable) {
-        // Adjust the pivot point for the rotation
         card.setPivotX(card.getWidth() / 2);
         card.setPivotY(card.getHeight() / 2);
 
@@ -38,7 +37,6 @@ public class AnimationUtils {
         firstHalfAnimation.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                // Run any mid-animation logic here (like changing the text on the card)
                 if (midAnimationRunnable != null) {
                     midAnimationRunnable.run();
                 }

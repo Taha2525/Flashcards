@@ -37,7 +37,7 @@ public class Category {
 
     @Override
     public String toString() {
-        return name; // Assuming "name" is the field containing the category name
+        return name;
     }
 
     public void addFlashcardId(String flashcardId) {

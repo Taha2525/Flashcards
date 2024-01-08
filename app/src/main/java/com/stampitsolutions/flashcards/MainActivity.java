@@ -216,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Save", (dialog, which) -> {
             flashcard.setFrontText(editFrontText.getText().toString());
             flashcard.setBackText(editBackText.getText().toString());
-            // updateflashcard with index and flashcard updated
             flashcardManager.updateFlashcard(index, flashcard);
 
             flashcardAdapter.notifyDataSetChanged();

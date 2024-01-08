@@ -36,5 +36,4 @@ public class CategoryView extends LinearLayout {
         flashcardCount.setText(count + " Cards");
     }
 
-    // Additional methods to handle category data
 }

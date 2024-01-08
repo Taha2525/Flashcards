@@ -41,6 +41,4 @@ public class CategoryManager {
         sharedPreferencesHelper.saveCategories(categories);
     }
 
-    // In CategoryManager class
-
 }

@@ -3,7 +3,7 @@ package com.stampitsolutions.flashcards.models;
 public class Flashcard {
     private String frontText;
     private String backText;
-    private String categoryId; // Assuming category is identified by a String ID
+    private String categoryId;
 
     public Flashcard(String frontText, String backText, String categoryId) {
         this.frontText = frontText;

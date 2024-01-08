@@ -30,5 +30,4 @@ public class FlashcardView extends LinearLayout {
         cardText.setText(text);
     }
 
-    // Additional methods to handle flashcard data
 }

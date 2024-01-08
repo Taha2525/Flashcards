@@ -29,7 +29,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categories.get(position);
         holder.categoryView.setCategoryName(category.getName());
-        // Set flashcard count if available
     }
 
     @Override

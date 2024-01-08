@@ -18,7 +18,6 @@ public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardAdapter.Flas
         this.flashcards = flashcards;
     }
 
-    // Update the constructor to accept the selected category ID
     public FlashcardAdapter(List<Flashcard> flashcards, String selectedCategoryId) {
         this.flashcards = flashcards;
         this.selectedCategoryId = selectedCategoryId;
@@ -35,10 +34,8 @@ public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardAdapter.Flas
     public void onBindViewHolder(@NonNull FlashcardViewHolder holder, int position) {
         Flashcard flashcard = flashcards.get(position);
         if (selectedCategoryId == null || selectedCategoryId.equals(flashcard.getCategoryId())) {
-            // Only bind the flashcard view if it belongs to the selected category or no category is selected
             holder.flashcardView.setCardText(flashcard.getFrontText()); // Or any other data you want to display
         } else {
-            // Hide the view if the flashcard does not belong to the selected category
             holder.flashcardView.setVisibility(View.GONE);
         }
     }

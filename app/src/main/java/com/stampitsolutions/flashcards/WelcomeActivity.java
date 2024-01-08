@@ -16,14 +16,12 @@ public class WelcomeActivity extends AppCompatActivity {
 
         Button createFlashcardsButton = findViewById(R.id.createFlashcardsButton);
         createFlashcardsButton.setOnClickListener(v -> {
-            // Save that the welcome screen has been shown
             SharedPreferences preferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
             preferences.edit().putBoolean("FirstLaunch", false).apply();
 
-            // Start MainActivity
             Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
             startActivity(intent);
-            finish(); // Close the welcome screen
+            finish();
         });
     }
 }
